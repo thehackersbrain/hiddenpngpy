@@ -17,7 +17,7 @@ def make_layout() -> Layout:
     return layout
 
 
-def generate_key(keyword):
+def generate_key(keyword) -> bytes:
     salt = b'QP9&PJ&V&2sm&U3l'
     kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
@@ -25,20 +25,21 @@ def generate_key(keyword):
             salt=salt,
             iterations=480000
             )
-    return urlsafe_b64encode(kdf.derive(bytes(keyword, 'utf-8')))
+    key = urlsafe_b64encode(kdf.derive(bytes(keyword, 'utf-8')))
+    return key
 
 
-def encrypt_data(data, key):
+def encrypt_data(data, key) -> bytes:
     f = Fernet(key)
     return f.encrypt(data)
 
 
-def decrypt_data(encrypted_data, key):
+def decrypt_data(encrypted_data, key) -> bytes:
     f = Fernet(key)
     return f.decrypt(encrypted_data)
 
 
-def hide_data(image_path, output_path, data, key):
+def hide_data(image_path, output_path, data, key) -> None:
     image = Image.open(image_path)
     data_bytes = data.encode()
     encrypted_data = encrypt_data(data_bytes, key)
@@ -61,7 +62,7 @@ def hide_data(image_path, output_path, data, key):
     image.save(output_path)
 
 
-def extract_data(image_path, key):
+def extract_data(image_path, key) -> bytes:
     image = Image.open(image_path)
     width, height = image.size
     data = []
