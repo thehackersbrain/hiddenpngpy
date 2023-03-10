@@ -40,7 +40,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
 
-    if (args.input.split('.')[0].lower() != 'png'):
+    if (args.input.split('.')[1].lower() != 'png'):
         print("[[bold red]!![/]] This Program only works with 'png' filetypes.") # noqa
         exit(1)
     input_file = args.input
