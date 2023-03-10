@@ -1,7 +1,12 @@
 from rich import print
+from rich.panel import Panel
+from rich.align import Align
+from rich import box
 import argparse
 from sys import exit
-from hiddenpng.functions import generate_key, hide_data, extract_data
+from hiddenpng.functions import generate_key, hide_data, extract_data, make_layout # noqa
+from rich.live import Live
+from time import sleep
 
 
 def parse_arguments():
@@ -58,7 +63,26 @@ def main():
             exit(1)
     else:
         data = extract_data(input_file, key)
-        print("[[bold cyan]>[/]] Extracted Data: [green]{}[/]".format(data.decode('utf-8'))) # noqa
+        pdata = Panel(
+                    Align.center("[green]{}[/]".format(data.decode('utf-8')), vertical="middle"), # noqa
+                    box=box.ROUNDED,
+                    padding=(1, 2),
+                    title="[bold cyan]Extracted Data from the File[/]",
+                    border_style="blue"
+                )
+        authorc = Panel(
+                Align.center("Created by: [bold cyan]Gaurav Raj[/] [[italic green link='https://github.com/thehackersbrain/']@thehackersbrain[/]]"), # noqa
+                box=box.ROUNDED,
+                padding=(1, 2),
+                title="[bold cyan]Author[/]",
+                border_style="blue"
+                )
+        layout = make_layout()
+        layout['main'].update(pdata)
+        layout['footer'].update(authorc)
+        with Live(layout, screen=True):
+            print(layout)
+            sleep(10)
 
 
 if __name__ == '__main__':

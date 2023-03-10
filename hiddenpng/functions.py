@@ -4,6 +4,17 @@ from cryptography.hazmat.primitives import padding
 from base64 import urlsafe_b64encode
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from rich.layout import Layout
+
+
+def make_layout() -> Layout:
+    layout = Layout(name="root")
+    layout.split(
+        Layout(name="main"),
+        Layout(name="footer", size=5),
+    )
+
+    return layout
 
 
 def generate_key(keyword):
